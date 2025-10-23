@@ -1,0 +1,131 @@
+name: Import Production-Ready Folder
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: 'Source branch to import from'
+        required: false
+        default: 'copilot/extract-production-ready-folder'
+      target_directory:
+        description: 'Target directory for import'
+        required: false
+        default: 'production-ready'
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Import production-ready folder
+        env:
+          IMPORT_TOKEN: ${{ secrets.YMERA_IMPORT_TOKEN }}
+          SOURCE_BRANCH: ${{ github.event.inputs.source_branch }}
+          TARGET_DIR: ${{ github.event.inputs.target_directory }}
+        run: |
+          set -e
+          
+          # Configuration
+          SOURCE_REPO="https://github.com/ymera-mfm/ymera_y.git"
+          TEMP_DIR="/tmp/import_temp_$$"
+          
+          echo "::group::Import Configuration"
+          echo "Source Repository: $SOURCE_REPO"
+          echo "Source Branch: $SOURCE_BRANCH"
+          echo "Target Directory: $TARGET_DIR"
+          echo "::endgroup::"
+          
+          # Check if token is available
+          if [ -z "$IMPORT_TOKEN" ]; then
+            echo "::error::YMERA_IMPORT_TOKEN secret is not configured"
+            echo "::error::Please add the GitHub token as a repository secret named 'YMERA_IMPORT_TOKEN'"
+            echo "::error::Go to Settings > Secrets and variables > Actions > New repository secret"
+            exit 1
+          fi
+          
+          # Create temporary directory
+          mkdir -p "$TEMP_DIR"
+          
+          # Clone the source repository
+          echo "::group::Cloning source repository"
+          if git clone --depth 1 --branch "$SOURCE_BRANCH" \
+            "https://oauth2:${IMPORT_TOKEN}@github.com/ymera-mfm/ymera_y.git" \
+            "$TEMP_DIR/source_repo" 2>&1 | grep -v "oauth2"; then
+            echo "✓ Repository cloned successfully"
+          else
+            echo "::error::Failed to clone repository"
+            echo "::error::Please verify:"
+            echo "::error::  - The YMERA_IMPORT_TOKEN has 'repo' scope"
+            echo "::error::  - You have access to ymera-mfm/ymera_y"
+            echo "::error::  - The branch '$SOURCE_BRANCH' exists"
+            exit 1
+          fi
+          echo "::endgroup::"
+          
+          # Create target directory
+          echo "::group::Copying files"
+          mkdir -p "$TARGET_DIR"
+          
+          # Copy content
+          if [ -d "$TEMP_DIR/source_repo/production-ready" ]; then
+            cp -r "$TEMP_DIR/source_repo/production-ready/"* "$TARGET_DIR/"
+            echo "✓ Copied from production-ready folder"
+          else
+            cp -r "$TEMP_DIR/source_repo/"* "$TARGET_DIR/" 2>/dev/null || true
+            cp -r "$TEMP_DIR/source_repo/".??* "$TARGET_DIR/" 2>/dev/null || true
+            rm -rf "$TARGET_DIR/.git"
+            echo "✓ Copied entire repository content"
+          fi
+          echo "::endgroup::"
+          
+          # Cleanup
+          rm -rf "$TEMP_DIR"
+          
+          # Display imported files
+          echo "::group::Imported files"
+          ls -la "$TARGET_DIR"
+          echo "::endgroup::"
+          
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Commit and push changes
+        run: |
+          TARGET_DIR="${{ github.event.inputs.target_directory }}"
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            git add "$TARGET_DIR"
+            git commit -m "Import production-ready folder from ymera_y
+            
+            Source: ymera-mfm/ymera_y
+            Branch: ${{ github.event.inputs.source_branch }}
+            Target: $TARGET_DIR/
+            Imported: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+            
+            git push
+            echo "✓ Changes committed and pushed successfully"
+          else
+            echo "No changes to commit"
+          fi
+          
+      - name: Summary
+        run: |
+          echo "## Import Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Import completed successfully**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Source**: ymera-mfm/ymera_y" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.event.inputs.source_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target**: ${{ github.event.inputs.target_directory }}/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Imported Files" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          ls -la "${{ github.event.inputs.target_directory }}" >> $GITHUB_STEP_SUMMARY || echo "No files found" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
