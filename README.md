@@ -2,6 +2,12 @@
 
 This repository contains agent configurations and production-ready code.
 
+## 🚀 Quick Start
+
+**Need to import now?** See [QUICK_START.md](QUICK_START.md) for the fastest method.
+
+**Need help?** See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed instructions and troubleshooting.
+
 ## Importing Production-Ready Folder
 
 To import the production-ready folder from the ymera_y repository, follow these steps:
