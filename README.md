@@ -45,12 +45,20 @@ export GITHUB_TOKEN=YOUR_GITHUB_TOKEN
 
 ### Troubleshooting
 
-If the import fails, check:
+If the import fails, use the diagnostic script:
+
+```bash
+./diagnose.sh YOUR_GITHUB_TOKEN
+```
+
+This will check:
 
 - **Token Permissions**: Ensure your token has the `repo` scope
 - **Repository Access**: Verify you have access to `ymera-mfm/ymera_y`
 - **Branch Exists**: Confirm the branch `copilot/extract-production-ready-folder` exists
 - **Token Expiration**: Check if your token has expired
+- **Network Connectivity**: Verify GitHub is reachable
+- **Authentication**: Test if the token works
 
 ### After Import
 
