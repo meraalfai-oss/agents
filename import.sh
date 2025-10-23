@@ -64,10 +64,24 @@ cd "$TEMP_DIR"
 
 # Clone the repository with authentication
 print_message "$YELLOW" "Cloning source repository..."
-if git clone --depth 1 --branch "$SOURCE_BRANCH" "https://oauth2:${TOKEN}@github.com/ymera-mfm/ymera_y.git" source_repo 2>&1 | grep -v "oauth2"; then
+# Temporarily disable exit on error for the clone command
+set +e
+CLONE_OUTPUT=$(git clone --depth 1 --branch "$SOURCE_BRANCH" "https://oauth2:${TOKEN}@github.com/ymera-mfm/ymera_y.git" source_repo 2>&1)
+CLONE_EXIT=$?
+set -e
+
+# Display output without token
+echo "$CLONE_OUTPUT" | grep -v "oauth2"
+
+if [ $CLONE_EXIT -eq 0 ] && [ -d "source_repo/.git" ]; then
     print_message "$GREEN" "✓ Repository cloned successfully"
 else
     print_message "$RED" "✗ Failed to clone repository"
+    if echo "$CLONE_OUTPUT" | grep -q "Invalid username or token"; then
+        print_message "$RED" "  - Token is invalid or has been revoked"
+        print_message "$RED" "  - If you posted the token publicly, GitHub automatically revoked it"
+        print_message "$RED" "  - Generate a new token at https://github.com/settings/tokens"
+    fi
     print_message "$RED" "Please check:"
     print_message "$RED" "  - The token has 'repo' scope"
     print_message "$RED" "  - You have access to the repository"

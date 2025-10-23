@@ -3,7 +3,7 @@
 # Diagnostic script for import issues
 # This script helps diagnose problems with the import process
 
-set -e
+# Note: Not using set -e because we expect some commands to fail during diagnostics
 
 # Colors
 RED='\033[0;31m'
@@ -88,7 +88,10 @@ SOURCE_REPO="ymera-mfm/ymera_y"
 SOURCE_BRANCH="copilot/extract-production-ready-folder"
 
 echo "Testing access to $SOURCE_REPO..."
-if git clone --depth 1 --branch "$SOURCE_BRANCH" "https://oauth2:${TOKEN}@github.com/$SOURCE_REPO.git" "$TEMP_DIR/test_source" 2>&1 | grep -v "oauth2" | grep -q "Cloning"; then
+CLONE_OUTPUT=$(git clone --depth 1 --branch "$SOURCE_BRANCH" "https://oauth2:${TOKEN}@github.com/$SOURCE_REPO.git" "$TEMP_DIR/test_source" 2>&1)
+CLONE_EXIT=$?
+
+if [ $CLONE_EXIT -eq 0 ] && [ -d "$TEMP_DIR/test_source/.git" ]; then
     print_check "ok" "Can access $SOURCE_REPO"
     print_check "ok" "Branch '$SOURCE_BRANCH' exists"
     
@@ -106,20 +109,24 @@ if git clone --depth 1 --branch "$SOURCE_BRANCH" "https://oauth2:${TOKEN}@github
     
     rm -rf "$TEMP_DIR/test_source"
 else
-    ERROR_OUTPUT=$(git clone --depth 1 --branch "$SOURCE_BRANCH" "https://oauth2:${TOKEN}@github.com/$SOURCE_REPO.git" "$TEMP_DIR/test_source" 2>&1 | grep -v "oauth2")
-    
-    if echo "$ERROR_OUTPUT" | grep -q "404"; then
+    if echo "$CLONE_OUTPUT" | grep -q "Invalid username or token"; then
+        print_check "fail" "Token is invalid or has been revoked"
+        echo "  Possible reasons:"
+        echo "  - Token doesn't have 'repo' scope"
+        echo "  - Token has been revoked (e.g., if posted publicly)"
+        echo "  - Generate a new token at https://github.com/settings/tokens"
+    elif echo "$CLONE_OUTPUT" | grep -q "404"; then
         print_check "fail" "Repository not found or no access"
         echo "  Possible reasons:"
         echo "  - Repository is private and token lacks access"
         echo "  - Token doesn't have 'repo' scope"
         echo "  - You're not a collaborator on the repository"
-    elif echo "$ERROR_OUTPUT" | grep -q "branch"; then
+    elif echo "$CLONE_OUTPUT" | grep -q "branch"; then
         print_check "fail" "Branch '$SOURCE_BRANCH' not found"
         echo "  Available branches may be different"
     else
         print_check "fail" "Unknown error accessing repository"
-        echo "  Error: $ERROR_OUTPUT"
+        echo "  Error: $(echo "$CLONE_OUTPUT" | grep -v "oauth2" | head -3)"
     fi
 fi
 
