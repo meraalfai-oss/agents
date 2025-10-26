@@ -8,6 +8,10 @@ This repository contains agent configurations and production-ready code.
 
 **Need help?** See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed instructions and troubleshooting.
 
+## 📖 Repository Information
+
+**[Repository Context](REPOSITORY_CONTEXT.md)** - Comprehensive overview of repository structure, purpose, and current state
+
 ## 📋 Governance and Guidelines
 
 This repository operates under a comprehensive governance framework:
