@@ -1,12 +1,25 @@
 # agents
 
-This repository contains agent configurations and production-ready code.
+This repository contains agent configurations and production-ready code for the meraalfai-oss organization.
+
+## 👋 New Here?
+
+**First time visiting?** Start with our [Getting Started Guide](GETTING_STARTED.md) for a complete introduction.
+
+**Not sure what to do?** See our [FAQ](FAQ.md) for answers to common questions about this repository.
+
+**Want to understand the purpose?** This repository provides:
+- 🤖 **Agent configurations** and governance for automated GitHub Copilot agents
+- 📦 **Production-ready code** import tools from the ymera_y repository
+- 📋 **Documentation** and best practices for agent operations and compliance
 
 ## 🚀 Quick Start
 
-**Need to import now?** See [QUICK_START.md](QUICK_START.md) for the fastest method.
+**Need to import production-ready code?** See [QUICK_START.md](QUICK_START.md) for the fastest method.
 
-**Need help?** See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed instructions and troubleshooting.
+**Need help with imports?** See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed instructions and troubleshooting.
+
+**Just browsing?** Check out the [FAQ](FAQ.md) to understand what you can do here.
 
 ## 📋 Governance and Guidelines
 
@@ -21,6 +34,48 @@ This repository operates under a comprehensive governance framework:
 - **[Changelog](CHANGELOG.md)** - Version history and notable changes
 
 All contributors and automated agents must adhere to these guidelines to ensure quality, security, and accountability.
+
+## 🎯 Common Tasks
+
+### For Users and Developers
+
+1. **Import Production-Ready Code**
+   - Quick method: `./import.sh YOUR_GITHUB_TOKEN`
+   - See [QUICK_START.md](QUICK_START.md) or [IMPORT_GUIDE.md](IMPORT_GUIDE.md)
+
+2. **Review Documentation**
+   - Browse governance documents to understand policies
+   - Check [TOOLS.md](TOOLS.md) for available scripts and tools
+   - Read [FAQ.md](FAQ.md) for common questions
+
+3. **Contribute to the Repository**
+   - Follow guidelines in [CONTRIBUTING.md](CONTRIBUTING.md)
+   - Adhere to the [Code of Conduct](CODE_OF_CONDUCT.md)
+   - Submit pull requests for improvements
+
+4. **Troubleshoot Import Issues**
+   - Run diagnostics: `./diagnose.sh YOUR_GITHUB_TOKEN`
+   - Check troubleshooting section in [IMPORT_GUIDE.md](IMPORT_GUIDE.md)
+   - Review import flow diagrams in [IMPORT_FLOW.md](IMPORT_FLOW.md)
+
+### For Automated Agents
+
+1. **Follow Agent Guidelines**
+   - Review [Agent Code of Conduct](AGENT_CODE_OF_CONDUCT.md)
+   - Follow [Agent Guidelines](.github/agents/agent-guidelines.md)
+   - Ensure compliance with [GOVERNANCE.md](GOVERNANCE.md)
+
+2. **Respond to Issues and PRs**
+   - Apply governance policies consistently
+   - Document all automated actions
+   - Maintain transparency in operations
+
+### Not Sure What to Do?
+
+- **Read the [FAQ](FAQ.md)** - Answers to common questions
+- **Check [NEXT_STEPS.md](NEXT_STEPS.md)** - Guidance on what to do after setup
+- **Browse documentation** - All guides are linked in this README
+- **Create an issue** - Ask questions or request clarification
 
 ## 📄 License
 

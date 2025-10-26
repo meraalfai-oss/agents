@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - LICENSE file (MIT License)
 - CONTRIBUTING.md with comprehensive contribution guidelines
 - CHANGELOG.md for tracking version history
+- FAQ.md - Frequently asked questions to help users understand the repository
+- GETTING_STARTED.md - Comprehensive introduction guide for new users
+
+### Changed
+- README.md - Enhanced with "New Here?" section, Common Tasks section, and improved navigation
+- README.md - Added links to FAQ and Getting Started guide for better user orientation
 
 ## [1.0.0] - 2025-10-26
 
