@@ -21,16 +21,31 @@ REQUIRED_FILES=(
     "CHANGELOG.md"
 )
 
+# Function to check if a file links to another
+check_link() {
+    local source_file=$1
+    local target_file=$2
+    local description=$3
+    
+    if grep -q "$target_file" "$source_file"; then
+        echo "  ✓ $description"
+        return 0
+    else
+        echo "  ✗ $description"
+        return 1
+    fi
+}
+
 # Check if required files exist
 echo "Checking required documentation files..."
-MISSING_FILES=0
+VALIDATION_ERRORS=0
 
 for file in "${REQUIRED_FILES[@]}"; do
     if [ -f "$file" ]; then
         echo "  ✓ $file"
     else
         echo "  ✗ $file MISSING"
-        MISSING_FILES=$((MISSING_FILES + 1))
+        VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
     fi
 done
 
@@ -40,34 +55,17 @@ echo ""
 echo "Checking for common link patterns..."
 
 # Check README links to key files
-if grep -q "GETTING_STARTED.md" README.md; then
-    echo "  ✓ README links to GETTING_STARTED"
-else
-    echo "  ✗ README missing link to GETTING_STARTED"
-    MISSING_FILES=$((MISSING_FILES + 1))
-fi
-
-if grep -q "FAQ.md" README.md; then
-    echo "  ✓ README links to FAQ"
-else
-    echo "  ✗ README missing link to FAQ"
-    MISSING_FILES=$((MISSING_FILES + 1))
-fi
-
-if grep -q "QUICK_START.md" README.md; then
-    echo "  ✓ README links to QUICK_START"
-else
-    echo "  ✗ README missing link to QUICK_START"
-    MISSING_FILES=$((MISSING_FILES + 1))
-fi
+check_link "README.md" "GETTING_STARTED.md" "README links to GETTING_STARTED" || VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+check_link "README.md" "FAQ.md" "README links to FAQ" || VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+check_link "README.md" "QUICK_START.md" "README links to QUICK_START" || VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
 
 echo ""
 
 # Summary
-if [ $MISSING_FILES -eq 0 ]; then
+if [ $VALIDATION_ERRORS -eq 0 ]; then
     echo "=== All documentation checks passed! ==="
     exit 0
 else
-    echo "=== Documentation validation failed with $MISSING_FILES issues ==="
+    echo "=== Documentation validation failed with $VALIDATION_ERRORS issues ==="
     exit 1
 fi
