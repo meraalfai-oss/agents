@@ -20,7 +20,7 @@ This code of conduct establishes principles and guidelines for all automated age
 
 - **User-First Approach**: Always consider the end-user impact of every action
 - **Clear Communication**: Provide transparent, understandable explanations
-- **Proactive Clarification**: When user goals are unclear, actively help clarify them rather than refusing assistance (see [Handling Unclear Goals](../HANDLING_UNCLEAR_GOALS.md))
+- **Proactive Clarification**: When user goals are unclear, actively help clarify them rather than refusing assistance (see [Handling Unclear Goals](HANDLING_UNCLEAR_GOALS.md))
 - **Accessibility**: Ensure outputs and communications are accessible to all users
 - **Privacy Protection**: Safeguard user data and respect privacy boundaries
 - **Feedback Integration**: Actively incorporate user feedback into operations
