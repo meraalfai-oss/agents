@@ -1,0 +1,149 @@
+name: Agent Compliance Checker
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  compliance-check:
+    name: Verify Agent Compliance
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Verify Code of Conduct Exists
+        run: |
+          echo "::group::Checking for Code of Conduct files"
+          if [ ! -f "CODE_OF_CONDUCT.md" ]; then
+            echo "::error::CODE_OF_CONDUCT.md is missing"
+            exit 1
+          fi
+          if [ ! -f "AGENT_CODE_OF_CONDUCT.md" ]; then
+            echo "::error::AGENT_CODE_OF_CONDUCT.md is missing"
+            exit 1
+          fi
+          echo "✅ Code of Conduct files present"
+          echo "::endgroup::"
+      
+      - name: Check for Secrets in Changes
+        run: |
+          echo "::group::Scanning for exposed secrets"
+          # Check for common secret patterns
+          if git diff origin/main...HEAD | grep -iE '(api[_-]?key|password|secret|token|aws[_-]?access|private[_-]?key).*=.*["\x27][^"\x27]{8,}'; then
+            echo "::error::Potential secrets detected in changes"
+            echo "::error::Please remove any exposed credentials"
+            exit 1
+          fi
+          echo "✅ No exposed secrets detected"
+          echo "::endgroup::"
+      
+      - name: Validate Minimal Changes Principle
+        run: |
+          echo "::group::Checking change scope"
+          FILES_CHANGED=$(git diff --name-only origin/main...HEAD | wc -l)
+          LINES_CHANGED=$(git diff --stat origin/main...HEAD | tail -1 | awk '{print $4 + $6}')
+          
+          echo "Files changed: $FILES_CHANGED"
+          echo "Lines changed: $LINES_CHANGED"
+          
+          if [ "$FILES_CHANGED" -gt 50 ]; then
+            echo "::warning::Large number of files changed ($FILES_CHANGED). Ensure changes are minimal and necessary."
+          fi
+          
+          if [ "$LINES_CHANGED" -gt 1000 ]; then
+            echo "::warning::Large number of lines changed ($LINES_CHANGED). Consider breaking into smaller PRs."
+          fi
+          echo "::endgroup::"
+      
+      - name: Check Documentation Updates
+        run: |
+          echo "::group::Verifying documentation"
+          CODE_CHANGES=$(git diff --name-only origin/main...HEAD | grep -E '\.(py|js|ts|java|go|rs|cpp|c)$' | wc -l)
+          DOC_CHANGES=$(git diff --name-only origin/main...HEAD | grep -E '\.(md|rst|txt)$|^docs/' | wc -l)
+          
+          if [ "$CODE_CHANGES" -gt 5 ] && [ "$DOC_CHANGES" -eq 0 ]; then
+            echo "::warning::Significant code changes detected without documentation updates"
+            echo "::warning::Consider updating relevant documentation"
+          else
+            echo "✅ Documentation check passed"
+          fi
+          echo "::endgroup::"
+      
+      - name: Verify .gitignore Protection
+        run: |
+          echo "::group::Checking .gitignore configuration"
+          if [ -f ".gitignore" ]; then
+            # Check for common patterns that should be ignored
+            REQUIRED_PATTERNS=("*.env" "*.key" "*.pem" "*secret*" ".idea/" ".vscode/" "node_modules/" "__pycache__/" "*.pyc" ".DS_Store")
+            MISSING_PATTERNS=()
+            
+            for pattern in "${REQUIRED_PATTERNS[@]}"; do
+              if ! grep -qF "$pattern" .gitignore 2>/dev/null; then
+                MISSING_PATTERNS+=("$pattern")
+              fi
+            done
+            
+            if [ ${#MISSING_PATTERNS[@]} -gt 0 ]; then
+              echo "::warning::Recommended .gitignore patterns missing: ${MISSING_PATTERNS[*]}"
+            else
+              echo "✅ .gitignore properly configured"
+            fi
+          else
+            echo "::warning::.gitignore file not found"
+          fi
+          echo "::endgroup::"
+      
+      - name: Check for Test Files
+        run: |
+          echo "::group::Checking test coverage"
+          CODE_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.(py|js|ts)$' | wc -l)
+          TEST_FILES=$(git diff --name-only origin/main...HEAD | grep -E '(test_|_test\.|\.test\.|\.spec\.)' | wc -l)
+          
+          if [ "$CODE_FILES" -gt 0 ]; then
+            echo "Code files modified: $CODE_FILES"
+            echo "Test files modified: $TEST_FILES"
+            
+            if [ "$TEST_FILES" -eq 0 ]; then
+              echo "::warning::Code changes detected without corresponding test changes"
+              echo "::warning::Consider adding or updating tests"
+            else
+              echo "✅ Tests included with code changes"
+            fi
+          fi
+          echo "::endgroup::"
+      
+      - name: Compliance Summary
+        run: |
+          echo "## 🔍 Agent Compliance Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Checks Completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Code of Conduct files verified" >> $GITHUB_STEP_SUMMARY
+          echo "- Secret scanning completed" >> $GITHUB_STEP_SUMMARY
+          echo "- Change scope validated" >> $GITHUB_STEP_SUMMARY
+          echo "- Documentation checked" >> $GITHUB_STEP_SUMMARY
+          echo "- .gitignore protection verified" >> $GITHUB_STEP_SUMMARY
+          echo "- Test coverage reviewed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Agent Code of Conduct" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All changes must comply with:" >> $GITHUB_STEP_SUMMARY
+          echo "- [Code of Conduct](../CODE_OF_CONDUCT.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Agent Code of Conduct](../AGENT_CODE_OF_CONDUCT.md)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Automated compliance verification completed*" >> $GITHUB_STEP_SUMMARY
