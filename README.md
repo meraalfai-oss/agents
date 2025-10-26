@@ -8,6 +8,18 @@ This repository contains agent configurations and production-ready code.
 
 **Need help?** See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed instructions and troubleshooting.
 
+## 📋 Governance and Guidelines
+
+This repository operates under a comprehensive governance framework:
+
+- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community standards and behavior expectations
+- **[Agent Code of Conduct](AGENT_CODE_OF_CONDUCT.md)** - Principles for automated agent operations
+- **[Governance](GOVERNANCE.md)** - Repository governance structure and policies
+- **[Tools Documentation](TOOLS.md)** - Comprehensive guide to all repository tools
+- **[Agent Guidelines](.github/agents/agent-guidelines.md)** - Detailed operational procedures for agents
+
+All contributors and automated agents must adhere to these guidelines to ensure quality, security, and accountability.
+
 ## Importing Production-Ready Folder
 
 To import the production-ready folder from the ymera_y repository, follow these steps:

@@ -32,3 +32,57 @@ desktop.ini
 # Logs
 *.log
 logs/
+
+# Additional security patterns
+.env.*
+!.env.example
+*.key
+*.pem
+*secret*
+credentials*
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.dylib
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+
+# Testing
+.coverage
+.pytest_cache/
+.tox/
+coverage/
+htmlcov/
+.nyc_output/
+
+# Package managers
+vendor/
+Pipfile.lock
+package-lock.json
+yarn.lock
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache
+.cache/
+*.cache
+
+# IDE workspace files
+*.code-workspace
