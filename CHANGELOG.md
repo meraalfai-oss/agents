@@ -13,10 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG.md for tracking version history
 - FAQ.md - Frequently asked questions to help users understand the repository
 - GETTING_STARTED.md - Comprehensive introduction guide for new users
+- validate-docs.sh - Script to validate documentation structure and links
 
 ### Changed
 - README.md - Enhanced with "New Here?" section, Common Tasks section, and improved navigation
 - README.md - Added links to FAQ and Getting Started guide for better user orientation
+- TOOLS.md - Added documentation for validate-docs.sh script
+- TOOLS.md - Updated tool count and troubleshooting section
 
 ## [1.0.0] - 2025-10-26
 
