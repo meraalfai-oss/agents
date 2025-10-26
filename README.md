@@ -17,6 +17,7 @@ This repository operates under a comprehensive governance framework:
 - **[Governance](GOVERNANCE.md)** - Repository governance structure and policies
 - **[Tools Documentation](TOOLS.md)** - Comprehensive guide to all repository tools
 - **[Agent Guidelines](.github/agents/agent-guidelines.md)** - Detailed operational procedures for agents
+- **[Handling Unclear Goals](HANDLING_UNCLEAR_GOALS.md)** - Guide for agents when user goals are unclear
 
 All contributors and automated agents must adhere to these guidelines to ensure quality, security, and accountability.
 
