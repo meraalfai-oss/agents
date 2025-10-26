@@ -21,6 +21,10 @@ This repository contains agent configurations and production-ready code for the 
 
 **Just browsing?** Check out the [FAQ](FAQ.md) to understand what you can do here.
 
+## 📖 Repository Information
+
+**[Repository Context](REPOSITORY_CONTEXT.md)** - Comprehensive overview of repository structure, purpose, and current state
+
 ## 📋 Governance and Guidelines
 
 This repository operates under a comprehensive governance framework:
