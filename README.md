@@ -15,10 +15,16 @@ This repository operates under a comprehensive governance framework:
 - **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community standards and behavior expectations
 - **[Agent Code of Conduct](AGENT_CODE_OF_CONDUCT.md)** - Principles for automated agent operations
 - **[Governance](GOVERNANCE.md)** - Repository governance structure and policies
+- **[Contributing](CONTRIBUTING.md)** - Guidelines for contributing to this repository
 - **[Tools Documentation](TOOLS.md)** - Comprehensive guide to all repository tools
 - **[Agent Guidelines](.github/agents/agent-guidelines.md)** - Detailed operational procedures for agents
+- **[Changelog](CHANGELOG.md)** - Version history and notable changes
 
 All contributors and automated agents must adhere to these guidelines to ensure quality, security, and accountability.
+
+## 📄 License
+
+This repository is licensed under the [MIT License](LICENSE).
 
 ## Importing Production-Ready Folder
 
