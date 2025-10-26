@@ -138,7 +138,13 @@ docker-compose -f docker-compose.prod.yml pull
 
 # Build services
 print_info "Building services..."
-docker-compose -f docker-compose.prod.yml build --no-cache
+# Use --no-cache only if CLEAN_BUILD=1 is set
+if [ "${CLEAN_BUILD:-0}" = "1" ]; then
+    print_info "Clean build requested (no cache)"
+    docker-compose -f docker-compose.prod.yml build --no-cache
+else
+    docker-compose -f docker-compose.prod.yml build
+fi
 
 # Start services
 print_info "Starting services..."

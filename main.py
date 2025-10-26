@@ -20,12 +20,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Annotated
 from fastapi import Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from datetime import timedelta
 import jwt
 # import aioredis # Commented out due to conflict
 
 # Initialize Security Components (Assuming Redis client is available)
 # We will initialize Redis client in lifespan and pass it
-redis_client: MockRedis = None
+redis_client = None
 jwt_manager: SecureJWTManager = None
 rbac_manager: RBACManager = RBACManager()
 
