@@ -54,7 +54,7 @@ This repository contains agent configurations and production-ready code for mana
 ## Branch Information
 
 - **main** - The default and primary branch for stable releases
-- **copilot/*** - Feature branches created by GitHub Copilot agents
+- **copilot/\*** - Feature branches created by GitHub Copilot agents
 
 ## Governance Framework
 
