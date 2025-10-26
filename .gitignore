@@ -86,3 +86,16 @@ yarn.lock
 
 # IDE workspace files
 *.code-workspace
+
+# Production-specific files
+certs/
+*.crt
+backup_*.sql
+*_backup.tar.gz
+
+# Docker volumes and data
+postgres_data/
+redis_data/
+grafana_data/
+prometheus_data/
+nginx_logs/
