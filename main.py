@@ -25,7 +25,7 @@ import jwt
 
 # Initialize Security Components (Assuming Redis client is available)
 # We will initialize Redis client in lifespan and pass it
-redis_client: aioredis.Redis = None
+redis_client: MockRedis = None
 jwt_manager: SecureJWTManager = None
 rbac_manager: RBACManager = RBACManager()
 
