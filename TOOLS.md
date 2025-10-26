@@ -108,6 +108,33 @@ TARGET_DIR="production-ready"
 - Troubleshooting access problems
 - Verifying token setup
 
+#### validate-docs.sh
+**Purpose**: Documentation structure validation tool
+**Status**: ✅ Active - Project Specific
+**Location**: `/validate-docs.sh`
+**Permissions**: Executable
+
+**Usage**:
+```bash
+./validate-docs.sh
+```
+
+**Checks Performed**:
+1. Verifies all required documentation files exist
+2. Validates key links between documentation files
+3. Ensures README links to main entry points (FAQ, Getting Started, Quick Start)
+4. Reports any missing files or broken link patterns
+
+**When to Use**:
+- After adding or updating documentation
+- Before committing documentation changes
+- As part of documentation review process
+- To ensure documentation completeness
+
+**Exit Codes**:
+- `0`: All checks passed
+- `1`: One or more validation issues found
+
 ### 3. CI/CD and Automation Tools
 
 #### GitHub Actions
@@ -574,6 +601,11 @@ Common issues and solutions:
 - Check token permissions
 - Verify network connectivity
 
+**Documentation issues**:
+- Run `./validate-docs.sh` to check structure
+- Verify all required files exist
+- Check that links between documents are correct
+
 **Linter errors**:
 - Check configuration files
 - Update to latest version
@@ -600,6 +632,6 @@ This repository uses a combination of standard development tools and custom scri
 ---
 
 *Last Updated: 2025-10-26*
-*Version: 1.0.0*
-*Tool Count: 15+ configured and recommended*
+*Version: 1.1.0*
+*Tool Count: 16+ configured and recommended*
 *Next Review: 2026-01-26*
